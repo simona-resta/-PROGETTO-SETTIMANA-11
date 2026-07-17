@@ -1,10 +1,63 @@
+import { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 const Footer = () => {
   const currentSong = useSelector((state) => state.player.currentSong);
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [volume, setVolume] = useState(100);
+
+  useEffect(() => {
+    if (audioRef.current && currentSong?.preview) {
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false));
+    }
+  }, [currentSong]);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    
+    if (audioRef.current.paused) {
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.error("Errore riproduzione:", err));
+    } else {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const updateProgress = () => {
+    if (audioRef.current?.duration) {
+      const percent = (audioRef.current.currentTime / audioRef.current.duration) * 100;
+      setProgress(percent || 0);
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    const val = e.target.value;
+    setVolume(val);
+    if (audioRef.current) audioRef.current.volume = val / 100;
+  };
+
+  const getVolumeIcon = () => {
+    if (volume == 0) return 'bi-volume-mute';
+    if (volume < 50) return 'bi-volume-down';
+    return 'bi-volume-up';
+  };
 
   return (
     <div className="player-fixed">
+      <audio 
+        key={currentSong?.id}
+        ref={audioRef} 
+        src={currentSong?.preview}
+        onTimeUpdate={updateProgress}
+        onEnded={() => setIsPlaying(false)}
+      />
+
       <div className="d-flex align-items-center" style={{ width: '30%', minWidth: '180px' }}>
         {currentSong ? (
           <>
@@ -25,7 +78,7 @@ const Footer = () => {
           </>
         ) : (
           <div className="text-muted" style={{ fontSize: '0.85rem' }}>
-            No track selected
+            Nessun brano selezionato
           </div>
         )}
       </div>
@@ -38,8 +91,13 @@ const Footer = () => {
           <button style={{ background: 'none', border: 'none', color: '#b3b3b3' }} className="fs-5">
             <i className="bi bi-skip-start-fill"></i>
           </button>
-          <button style={{ background: 'none', border: 'none', color: '#ffffff' }} className="fs-3">
-            <i className="bi bi-play-circle-fill"></i>
+          <button 
+            style={{ background: 'none', border: 'none', color: '#ffffff' }} 
+            className="fs-3" 
+            onClick={togglePlay}
+            disabled={!currentSong}
+          >
+            <i className={`bi ${isPlaying ? 'bi-pause-circle-fill' : 'bi-play-circle-fill'}`}></i>
           </button>
           <button style={{ background: 'none', border: 'none', color: '#b3b3b3' }} className="fs-5">
             <i className="bi bi-skip-end-fill"></i>
@@ -51,9 +109,9 @@ const Footer = () => {
         <div className="d-flex align-items-center w-100 gap-2">
           <span className="text-muted" style={{ fontSize: '0.7rem' }}>0:00</span>
           <div className="player-progress-bar">
-            <div className="player-progress"></div>
+            <div className="player-progress" style={{ width: `${progress}%` }}></div>
           </div>
-          <span className="text-muted" style={{ fontSize: '0.7rem' }}>3:30</span>
+          <span className="text-muted" style={{ fontSize: '0.7rem' }}>0:30</span>
         </div>
       </div>
 
@@ -61,14 +119,17 @@ const Footer = () => {
         <button style={{ background: 'none', border: 'none', color: '#b3b3b3' }}>
           <i className="bi bi-list-play"></i>
         </button>
-        <button style={{ background: 'none', border: 'none', color: '#b3b3b3' }}>
-          <i className="bi bi-speaker"></i>
-        </button>
         <div className="d-flex align-items-center gap-2">
-          <i className="bi bi-volume-up text-muted"></i>
-          <div style={{ width: '80px', height: '4px', backgroundColor: '#535353', borderRadius: '2px' }}>
-            <div style={{ width: '50%', height: '100%', backgroundColor: '#b3b3b3', borderRadius: '2px' }}></div>
-          </div>
+          <i className={`bi ${getVolumeIcon()} text-white`} style={{ fontSize: '1.2rem' }}></i>
+          <input 
+            type="range" 
+            min="0" 
+            max="100" 
+            value={volume} 
+            onChange={handleVolumeChange} 
+            className="volume-slider"
+            style={{ '--volume': `${volume}%` }}
+          />
         </div>
       </div>
     </div>

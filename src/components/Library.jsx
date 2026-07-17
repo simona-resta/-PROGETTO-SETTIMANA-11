@@ -59,82 +59,59 @@ const Library = () => {
   };
 
   return (
-    <Container fluid className="px-4">
+    <Container fluid className="px-4 py-4">
       <h2 className="fw-bold mb-4">Your Library</h2>
       <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         
         <Col>
-          <div 
-            className="album-card d-flex align-items-center justify-content-center" 
-            style={{ aspectRatio: '1', background: 'linear-gradient(135deg, #450af5, #c4efd9)', cursor: 'pointer' }} 
-            onClick={() => { navigate('/playlist/Preferiti'); window.scrollTo(0, 0); }}
-          >
-            <h3 className="text-white fw-bold m-0">Preferiti</h3>
+          <div className="album-card h-100" onClick={() => navigate('/playlist/Preferiti')}>
+            <div className="playlist-cover-gradient d-flex align-items-center justify-content-center">
+              <i className="bi bi-heart-fill text-white fs-1"></i>
+            </div>
+            <h4 className="fw-bold text-white mb-1">Preferiti</h4>
+            <p className="text-white-50 small">Playlist personale</p>
           </div>
         </Col>
 
         {Object.keys(playlists).map(pName => (
           <Col key={pName}>
-            <div 
-              className="album-card d-flex align-items-center justify-content-center position-relative" 
-              style={{ aspectRatio: '1', backgroundColor: '#282828', cursor: 'pointer' }} 
-              onClick={() => { navigate(`/playlist/${pName}`); window.scrollTo(0, 0); }}
-            >
-              <div className="position-absolute top-0 end-0 p-2 d-flex gap-2">
-                <div onClick={(e) => startEdit(e, pName)}>
-                  <i className="bi bi-pencil text-white fs-6"></i>
-                </div>
-                <div onClick={(e) => handleDeletePlaylist(e, pName)}>
-                  <i className="bi bi-x-circle text-danger fs-5"></i>
-                </div>
+            <div className="album-card h-100 position-relative" onClick={() => navigate(`/playlist/${pName}`)}>
+              <div className="playlist-cover d-flex align-items-center justify-content-center">
+                <i className="bi bi-music-note-beamed"></i>
               </div>
-              <h3 className="text-white fw-bold m-0 text-center px-2">{pName}</h3>
+              <h4 className="fw-bold text-white mb-1 text-truncate">{pName}</h4>
+              <p className="text-white-50 small mb-0">Playlist</p>
+              
+              <div className="position-absolute top-0 end-0 p-3 d-flex gap-2">
+                <button className="btn-icon" onClick={(e) => startEdit(e, pName)}><i className="bi bi-pencil"></i></button>
+                <button className="btn-icon text-danger" onClick={(e) => handleDeletePlaylist(e, pName)}><i className="bi bi-trash"></i></button>
+              </div>
             </div>
           </Col>
         ))}
 
         <Col>
-          <div 
-            className="album-card d-flex align-items-center justify-content-center" 
-            style={{ aspectRatio: '1', backgroundColor: '#181818', border: '2px dashed #535353', cursor: 'pointer' }} 
-            onClick={() => { setEditMode(false); setShowModal(true); }}
-          >
-            <div className="text-center">
-              <i className="bi bi-plus-circle fs-1 text-muted mb-2 d-block"></i>
-              <h5 className="text-muted fw-bold m-0">Crea Playlist</h5>
-            </div>
+          <div className="album-card h-100 d-flex flex-column align-items-center justify-content-center border-dashed" onClick={() => { setEditMode(false); setShowModal(true); }}>
+            <i className="bi bi-plus-circle fs-1 text-muted mb-2"></i>
+            <h5 className="text-muted fw-bold">Crea Playlist</h5>
           </div>
         </Col>
       </Row>
 
-      <Modal show={showModal} onHide={handleClose} centered>
-        <Modal.Header closeButton className="bg-dark text-white border-bottom border-secondary">
+      <Modal show={showModal} onHide={handleClose} centered variant="dark">
+        <Modal.Header closeButton className="bg-dark text-white border-secondary">
           <Modal.Title>{editMode ? 'Rinomina playlist' : 'Crea nuova playlist'}</Modal.Title>
         </Modal.Header>
         <Modal.Body className="bg-dark text-white">
           <Form onSubmit={handleSavePlaylist}>
-            <Form.Group>
-              <Form.Label>Nome della playlist</Form.Label>
-              <Form.Control 
-                type="text" 
-                value={playlistInput}
-                onChange={(e) => setPlaylistInput(e.target.value)}
-                autoFocus
-                className="bg-black text-white border-secondary"
-              />
-            </Form.Group>
+            <Form.Control type="text" value={playlistInput} onChange={(e) => setPlaylistInput(e.target.value)} autoFocus className="bg-black text-white border-secondary" placeholder="Nome della playlist" />
           </Form>
         </Modal.Body>
-        <Modal.Footer className="bg-dark border-top border-secondary">
-          <Button variant="secondary" onClick={handleClose}>
-            Annulla
-          </Button>
-          <Button variant="success" style={{ backgroundColor: '#198754', borderColor: '#198754' }} onClick={handleSavePlaylist}>
-            {editMode ? 'Salva' : 'Crea'}
-          </Button>
+        <Modal.Footer className="bg-dark border-secondary">
+          <Button variant="outline-secondary" onClick={handleClose}>Annulla</Button>
+          <Button variant="success" onClick={handleSavePlaylist} style={{ backgroundColor: '#1db954', border: 'none' }}>Salva</Button>
         </Modal.Footer>
       </Modal>
-
     </Container>
   );
 };

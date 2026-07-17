@@ -11,13 +11,18 @@ const SongCard = ({ track, onRemove }) => {
   const isLiked = likedSongs.some((song) => song.id === track.id);
 
   const handlePlay = () => {
+    console.log("Cliccata canzone:", track);
+    if (!track.preview) {
+      console.warn("Questa canzone non ha un link di anteprima disponibile.");
+      dispatch(showNotification("Anteprima non disponibile per questo brano"));
+      return;
+    }
     dispatch(setCurrentSongAction(track));
   };
 
   const handleLike = (e) => {
     e.stopPropagation();
     dispatch(toggleLikeAction(track));
-    
     const message = isLiked ? 'Rimosso dai preferiti' : 'Aggiunto ai preferiti';
     dispatch(showNotification(message));
   };
@@ -25,7 +30,6 @@ const SongCard = ({ track, onRemove }) => {
   const handleAddToPlaylist = (e, playlistName) => {
     e.stopPropagation();
     dispatch(addToPlaylistAction(playlistName, track));
-    
     dispatch(showNotification(`Aggiunto a ${playlistName}`));
     setShowDropdown(false); 
   };
@@ -55,7 +59,7 @@ const SongCard = ({ track, onRemove }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <Dropdown.Toggle variant="link" className="custom-dropdown-toggle p-0 border-0 text-white shadow-none d-flex align-items-center text-decoration-none">
-              <i className="bi bi-plus-circle fs-5" style={{ transition: 'transform 0.2s ease' }} onMouseOver={e => e.target.style.transform = 'scale(1.2)'} onMouseOut={e => e.target.style.transform = 'scale(1)'}></i>
+              <i className="bi bi-plus-circle fs-5"></i>
             </Dropdown.Toggle>
             <Dropdown.Menu variant="dark">
               <Dropdown.Header>Aggiungi a playlist</Dropdown.Header>

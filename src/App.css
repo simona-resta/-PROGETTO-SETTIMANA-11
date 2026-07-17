@@ -84,6 +84,20 @@ body {
   z-index: 1051;
 }
 
+.player-fixed button {
+  transition: all 0.2s cubic-bezier(0.3, 0, 0.4, 1);
+}
+
+.player-fixed button:hover {
+  color: #ffffff !important;
+  transform: scale(1.1);
+}
+
+.player-fixed button.fs-3:hover {
+  transform: scale(1.15);
+  color: #1db954 !important;
+}
+
 .player-fixed > div:last-child {
   display: none !important;
 }
@@ -178,7 +192,7 @@ a:hover .bi-spotify, a:hover .bi-spotify + span {
 }
 
 .album-card:hover {
-  background-color: #282828;
+  background-color: #222222;
   transform: translateY(-6px) scale(1.02);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(29, 185, 84, 0.15);
 }
@@ -273,6 +287,7 @@ a:hover .bi-spotify, a:hover .bi-spotify + span {
   background-color: #535353;
   border-radius: 2px;
   position: relative;
+  cursor: pointer;
 }
 
 .player-progress {
@@ -280,10 +295,42 @@ a:hover .bi-spotify, a:hover .bi-spotify + span {
   height: 100%;
   background-color: #b3b3b3;
   border-radius: 2px;
+  transition: background-color 0.2s ease;
 }
 
 .player-progress-bar:hover .player-progress {
   background-color: #1db954;
+}
+
+.volume-slider {
+  width: 90px;
+  height: 4px;
+  background: linear-gradient(to right, #1db954 var(--volume), #535353 var(--volume));
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: background 0.2s;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  border: none;
 }
 
 .like-btn-inline {
@@ -377,4 +424,58 @@ a:hover .bi-spotify, a:hover .bi-spotify + span {
 .dropdown-menu.dropdown-menu-dark .dropdown-header {
   color: #b3b3b3;
   font-size: 0.8rem;
+}
+
+.playlist-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #282828;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  transition: background 0.3s ease;
+}
+
+.playlist-cover i {
+  font-size: 3rem;
+  color: #535353;
+}
+
+.playlist-cover-gradient {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #450af5, #c4efd9);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.border-dashed {
+  border: 2px dashed #535353;
+  transition: border-color 0.3s;
+}
+
+.border-dashed:hover {
+  border-color: #ffffff;
+}
+
+.btn-icon {
+  background: rgba(0,0,0,0.5);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.album-card:hover .btn-icon {
+  opacity: 1;
+}
+
+.btn-icon:hover {
+  transform: scale(1.1);
+  background: rgba(0,0,0,0.8);
 }
