@@ -53,7 +53,7 @@ const MyNavbar = () => {
           <button className="nav-btn" onClick={handleResetHome}>
             <i className="bi bi-house-door-fill fs-5"></i> Home
           </button>
-          <button className="nav-btn" onClick={() => setIsMenuOpen(false)}>
+          <button className="nav-btn" onClick={() => { setIsMenuOpen(false); navigate('/library'); window.scrollTo(0, 0); }}>
             <i className="bi bi-book-half fs-5"></i> Your Library
           </button>
 

@@ -183,6 +183,10 @@ a:hover .bi-spotify, a:hover .bi-spotify + span {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(29, 185, 84, 0.15);
 }
 
+.album-card:has(.show) {
+  z-index: 99 !important;
+}
+
 .album-image {
   width: 100%;
   border-radius: 4px;
@@ -298,6 +302,10 @@ a:hover .bi-spotify, a:hover .bi-spotify + span {
   transform: scale(1.2);
 }
 
+.custom-dropdown-toggle::after {
+  display: none !important;
+}
+
 @media (min-width: 575px) {
   .player-fixed {
     padding: 0 20px;
@@ -357,4 +365,16 @@ a:hover .bi-spotify, a:hover .bi-spotify + span {
     margin-left: 240px;
     padding: 30px;
   }
+}
+
+.dropdown-menu.dropdown-menu-dark .dropdown-item:hover,
+.dropdown-menu.dropdown-menu-dark .dropdown-item:focus,
+.dropdown-menu.dropdown-menu-dark .dropdown-item:active {
+  background-color: #198754 !important;
+  color: #ffffff !important;
+}
+
+.dropdown-menu.dropdown-menu-dark .dropdown-header {
+  color: #b3b3b3;
+  font-size: 0.8rem;
 }

@@ -1,39 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Container, Spinner, Alert } from 'react-bootstrap';
-import { fetchSongsAction, setCurrentSongAction, toggleLikeAction } from '../redux/actions/actions';
-
-const SongCard = ({ track }) => {
-  const dispatch = useDispatch();
-  const likedSongs = useSelector((state) => state.likes.likedSongs);
-  const isLiked = likedSongs.includes(track.id);
-
-  const handlePlay = () => {
-    dispatch(setCurrentSongAction(track));
-  };
-
-  const handleLike = (e) => {
-    e.stopPropagation();
-    dispatch(toggleLikeAction(track.id));
-  };
-
-  return (
-    <div className="album-card" onClick={handlePlay}>
-      <img src={track.album.cover_medium} alt={track.title} className="album-image" />
-      
-      <div className="d-flex justify-content-between align-items-center mt-3 gap-2">
-        <div className="album-title m-0">
-          {track.title}
-        </div>
-        <button className="like-btn-inline" onClick={handleLike} style={{ background: 'none', border: 'none', padding: 0 }}>
-          <i className={`bi fs-5 ${isLiked ? 'bi-heart-fill text-success' : 'bi-heart text-white'}`}></i>
-        </button>
-      </div>
-
-      <div className="album-artist">Artist: {track.artist.name}</div>
-    </div>
-  );
-};
+import { fetchSongsAction } from '../redux/actions/actions';
+import SongCard from './SongCard';
 
 const Home = () => {
   const dispatch = useDispatch();

@@ -1,4 +1,4 @@
-import { SET_CATEGORY_SONGS, SET_SEARCH_SONGS, SET_SEARCH_QUERY, SET_LOADING, SET_ERROR } from '../actions/actions';
+import { SET_CATEGORY_SONGS, SET_SEARCH_SONGS, SET_SEARCH_QUERY, SET_LOADING, SET_ERROR, SET_NOTIFICATION } from '../actions/actions';
 
 const initialState = {
   rock: [],
@@ -8,6 +8,7 @@ const initialState = {
   searchQuery: '',
   isLoading: false,
   error: null,
+  notification: null,
 };
 
 const songsReducer = (state = initialState, action) => {
@@ -36,6 +37,11 @@ const songsReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case SET_NOTIFICATION:
+      return {
+        ...state,
+        notification: action.payload,
       };
     default:
       return state;

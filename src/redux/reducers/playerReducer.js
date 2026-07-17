@@ -1,19 +1,34 @@
-import { SET_CURRENT_SONG } from '../actions/actions';
+import { ADD_TO_PLAYLIST } from '../actions/actions';
 
-const initialState = {
-  currentSong: null,
+const defaultPlaylists = {
+  'My Favorites': [],
+  'Workout Focus': [],
+  'Chill Vibes': []
 };
 
-const playerReducer = (state = initialState, action) => {
+const savedPlaylists = JSON.parse(localStorage.getItem('playlists')) || defaultPlaylists;
+
+const initialState = {
+  list: savedPlaylists
+};
+
+const playlistsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_CURRENT_SONG:
+    case ADD_TO_PLAYLIST:
+      const { playlistName, song } = action.payload;
+      if (state.list[playlistName].some((s) => s.id === song.id)) {
+        return state;
+      }
       return {
         ...state,
-        currentSong: action.payload,
+        list: {
+          ...state.list,
+          [playlistName]: [...state.list[playlistName], song]
+        }
       };
     default:
       return state;
   }
 };
 
-export default playerReducer;
+export default playlistsReducer;
