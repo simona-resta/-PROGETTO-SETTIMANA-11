@@ -9,15 +9,19 @@ const Footer = () => {
   const [volume, setVolume] = useState(100);
 
   useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
     if (audioRef.current && currentSong?.preview) {
+      audioRef.current.load();
       audioRef.current.play()
         .then(() => setIsPlaying(true))
         .catch(() => setIsPlaying(false));
     }
-  }, [currentSong]);
+  }, [currentSong, volume]);
 
   const togglePlay = () => {
-    if (!audioRef.current) return;
+    if (!audioRef.current || !currentSong?.preview) return;
     
     if (audioRef.current.paused) {
       audioRef.current.play()
@@ -51,18 +55,21 @@ const Footer = () => {
   return (
     <div className="player-fixed">
       <audio 
+        crossOrigin="anonymous"
         key={currentSong?.id}
         ref={audioRef} 
         src={currentSong?.preview}
         onTimeUpdate={updateProgress}
         onEnded={() => setIsPlaying(false)}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
       />
 
       <div className="d-flex align-items-center" style={{ width: '30%', minWidth: '180px' }}>
         {currentSong ? (
           <>
             <img
-              src={currentSong.album.cover_small}
+              src={currentSong.album?.cover_small || 'https://via.placeholder.com/56'}
               alt={currentSong.title}
               style={{ width: '56px', height: '56px', borderRadius: '4px', objectFit: 'cover' }}
               className="me-3"
@@ -72,7 +79,7 @@ const Footer = () => {
                 {currentSong.title}
               </div>
               <div className="text-muted text-truncate" style={{ fontSize: '0.75rem' }}>
-                {currentSong.artist.name}
+                {currentSong.artist?.name}
               </div>
             </div>
           </>
@@ -95,7 +102,7 @@ const Footer = () => {
             style={{ background: 'none', border: 'none', color: '#ffffff' }} 
             className="fs-3" 
             onClick={togglePlay}
-            disabled={!currentSong}
+            disabled={!currentSong?.preview}
           >
             <i className={`bi ${isPlaying ? 'bi-pause-circle-fill' : 'bi-play-circle-fill'}`}></i>
           </button>

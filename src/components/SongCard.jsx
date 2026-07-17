@@ -36,7 +36,11 @@ const SongCard = ({ track, onRemove }) => {
 
   return (
     <div className="album-card" onClick={handlePlay}>
-      <img src={track.album.cover_medium} alt={track.title} className="album-image" />
+      <img 
+        src={track.album?.cover_medium || 'https://via.placeholder.com/150'} 
+        alt={track.title} 
+        className="album-image" 
+      />
       
       <div className="d-flex justify-content-between align-items-center mt-3 gap-2">
         <div className="album-title m-0">
@@ -77,7 +81,7 @@ const SongCard = ({ track, onRemove }) => {
         </div>
       </div>
 
-      <div className="album-artist">Artist: {track.artist.name}</div>
+      <div className="album-artist">Artist: {track.artist?.name}</div>
     </div>
   );
 };

@@ -21,7 +21,7 @@ const Home = () => {
   }, [dispatch]);
 
   return (
-    <Container fluid className="px-4">
+    <Container fluid className="p-0">
       <Row className="justify-content-center mb-5 d-none d-md-flex">
         <Col xs="auto" className="d-flex gap-4">
           <a href="#" className="top-nav-link">Trending</a>

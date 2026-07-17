@@ -19,7 +19,7 @@ function App() {
     <BrowserRouter>
       <div className="d-flex">
         <MyNavbar />
-        <main className="flex-grow-1 main-content-scroll">
+        <main className="main-content-scroll">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/library" element={<Library />} />
