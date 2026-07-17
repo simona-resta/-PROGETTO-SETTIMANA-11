@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col, Container } from 'react-bootstrap';
+import { Row, Col, Container, Spinner, Alert } from 'react-bootstrap';
 import { fetchSongsAction, setCurrentSongAction, toggleLikeAction } from '../redux/actions/actions';
 
 const SongCard = ({ track }) => {
@@ -25,7 +25,7 @@ const SongCard = ({ track }) => {
         <div className="album-title m-0">
           {track.title}
         </div>
-        <button className="like-btn-inline" onClick={handleLike}>
+        <button className="like-btn-inline" onClick={handleLike} style={{ background: 'none', border: 'none', padding: 0 }}>
           <i className={`bi fs-5 ${isLiked ? 'bi-heart-fill text-success' : 'bi-heart text-white'}`}></i>
         </button>
       </div>
@@ -42,6 +42,8 @@ const Home = () => {
   const hiphopSongs = useSelector((state) => state.songs.hiphop);
   const searchResults = useSelector((state) => state.songs.searchResults);
   const searchQuery = useSelector((state) => state.songs.searchQuery);
+  const isLoading = useSelector((state) => state.songs.isLoading);
+  const error = useSelector((state) => state.songs.error);
 
   useEffect(() => {
     dispatch(fetchSongsAction('queen', 'rock'));
@@ -61,51 +63,70 @@ const Home = () => {
         </Col>
       </Row>
 
-      {searchQuery && searchResults.length > 0 && (
-        <div className="mb-5">
-          <h2 className="fw-bold mb-4">Search Results for "{searchQuery}"</h2>
-          <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            {searchResults.map((track) => (
-              <Col key={track.id}>
-                <SongCard track={track} />
-              </Col>
-            ))}
-          </Row>
+      {error && (
+        <Alert variant="danger" className="text-center rounded-3 mb-4">
+          <i className="bi bi-exclamation-triangle-fill me-2"></i>
+          Si è verificato un errore: {error}
+        </Alert>
+      )}
+
+      {isLoading && (
+        <div className="text-center py-5">
+          <Spinner animation="border" variant="light" role="status" style={{ width: '3rem', height: '3rem' }}>
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
         </div>
       )}
 
-      <div className="mb-5">
-        <h2 className="fw-bold mb-4">Rock Classics</h2>
-        <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-          {rockSongs.map((track) => (
-            <Col key={track.id}>
-              <SongCard track={track} />
-            </Col>
-          ))}
-        </Row>
-      </div>
+      {!isLoading && (
+        <>
+          {searchQuery && searchResults.length > 0 && (
+            <div className="mb-5">
+              <h2 className="fw-bold mb-4">Search Results for "{searchQuery}"</h2>
+              <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                {searchResults.map((track) => (
+                  <Col key={track.id}>
+                    <SongCard track={track} />
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          )}
 
-      <div className="mb-5">
-        <h2 className="fw-bold mb-4">Pop Culture</h2>
-        <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-          {popSongs.map((track) => (
-            <Col key={track.id}>
-              <SongCard track={track} />
-            </Col>
-          ))}
-        </Row>
-      </div>
+          <div className="mb-5">
+            <h2 className="fw-bold mb-4">Rock Classics</h2>
+            <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+              {rockSongs.map((track) => (
+                <Col key={track.id}>
+                  <SongCard track={track} />
+                </Col>
+              ))}
+            </Row>
+          </div>
 
-      <div className="mb-5">
-        <h2 className="fw-bold mb-4">#HipHop</h2>
-        <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-          {hiphopSongs.map((track) => (
-            <Col key={track.id}>
-              <SongCard track={track} />
-            </Col>
-          ))}
-        </Row>
-      </div>
+          <div className="mb-5">
+            <h2 className="fw-bold mb-4">Pop Culture</h2>
+            <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+              {popSongs.map((track) => (
+                <Col key={track.id}>
+                  <SongCard track={track} />
+                </Col>
+              ))}
+            </Row>
+          </div>
+
+          <div className="mb-5">
+            <h2 className="fw-bold mb-4">#HipHop</h2>
+            <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+              {hiphopSongs.map((track) => (
+                <Col key={track.id}>
+                  <SongCard track={track} />
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </>
+      )}
     </Container>
   );
 };

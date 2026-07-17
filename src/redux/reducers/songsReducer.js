@@ -1,4 +1,4 @@
-import { SET_CATEGORY_SONGS, SET_SEARCH_SONGS, SET_SEARCH_QUERY } from '../actions/actions';
+import { SET_CATEGORY_SONGS, SET_SEARCH_SONGS, SET_SEARCH_QUERY, SET_LOADING, SET_ERROR } from '../actions/actions';
 
 const initialState = {
   rock: [],
@@ -6,6 +6,8 @@ const initialState = {
   hiphop: [],
   searchResults: [],
   searchQuery: '',
+  isLoading: false,
+  error: null,
 };
 
 const songsReducer = (state = initialState, action) => {
@@ -24,6 +26,16 @@ const songsReducer = (state = initialState, action) => {
       return {
         ...state,
         searchQuery: action.payload,
+      };
+    case SET_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+    case SET_ERROR:
+      return {
+        ...state,
+        error: action.payload,
       };
     default:
       return state;

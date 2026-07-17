@@ -3,6 +3,8 @@ export const TOGGLE_LIKE = 'TOGGLE_LIKE';
 export const SET_CATEGORY_SONGS = 'SET_CATEGORY_SONGS';
 export const SET_SEARCH_SONGS = 'SET_SEARCH_SONGS';
 export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
+export const SET_LOADING = 'SET_LOADING';
+export const SET_ERROR = 'SET_ERROR';
 
 export const setCurrentSongAction = (song) => ({
   type: SET_CURRENT_SONG,
@@ -29,8 +31,21 @@ export const setSearchQueryAction = (query) => ({
   payload: query,
 });
 
+export const setLoadingAction = (status) => ({
+  type: SET_LOADING,
+  payload: status,
+});
+
+export const setErrorAction = (error) => ({
+  type: SET_ERROR,
+  payload: error,
+});
+
 export const fetchSongsAction = (artistName, category) => {
   return (dispatch) => {
+    dispatch(setLoadingAction(true));
+    dispatch(setErrorAction(null));
+
     fetch('https://striveschool-api.herokuapp.com/api/deezer/search?q=' + artistName, {
       headers: {
         'X-RapidAPI-Host': 'deezerdevs-deezer.p.rapidapi.com',
@@ -42,7 +57,7 @@ export const fetchSongsAction = (artistName, category) => {
         if (res.ok) {
           return res.json();
         } else {
-          throw new Error('Error fetching songs');
+          throw new Error('Errore nel recupero dei dati API');
         }
       })
       .then((data) => {
@@ -54,6 +69,10 @@ export const fetchSongsAction = (artistName, category) => {
       })
       .catch((err) => {
         console.error(err);
+        dispatch(setErrorAction(err.message)); 
+      })
+      .finally(() => {
+        dispatch(setLoadingAction(false)); 
       });
   };
 };
