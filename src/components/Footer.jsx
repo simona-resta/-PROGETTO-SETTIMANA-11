@@ -78,7 +78,7 @@ const Footer = () => {
               <div className="text-white fw-semibold text-truncate" style={{ fontSize: '0.85rem' }}>
                 {currentSong.title}
               </div>
-              <div className="text-muted text-truncate" style={{ fontSize: '0.75rem' }}>
+              <div className="text-white-50 text-truncate" style={{ fontSize: '0.75rem' }}>
                 {currentSong.artist?.name}
               </div>
             </div>
